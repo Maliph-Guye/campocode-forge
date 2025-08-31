@@ -81,5 +81,18 @@
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.38.0",
     "vite": "^5.4.19"
-  }
+  },
+  "description": "**URL**: https://lovable.dev/projects/e7fdc40b-e369-4973-ad9d-ac855fcc1102",
+  "main": "eslint.config.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Maliph-Guye/campocode-forge.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Maliph-Guye/campocode-forge/issues"
+  },
+  "homepage": "https://github.com/Maliph-Guye/campocode-forge#readme"
 }

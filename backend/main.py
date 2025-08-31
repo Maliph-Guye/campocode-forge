@@ -23,7 +23,7 @@ import os
 from dotenv import load_dotenv
 
 # Import routers
-from routers import users, courses, achievements
+from routers import users, courses, achievements, learning, practice, analytics
 
 # Import database and models
 from database import engine
@@ -196,6 +196,9 @@ try:
     app.include_router(users.router, prefix="/api/v1", tags=["Users"])
     app.include_router(courses.router, prefix="/api/v1", tags=["Courses"])
     app.include_router(achievements.router, prefix="/api/v1", tags=["Achievements"])
+    app.include_router(learning.router, prefix="/api/v1", tags=["Learning"])
+    app.include_router(practice.router, prefix="/api/v1", tags=["Practice"])
+    app.include_router(analytics.router, prefix="/api/v1", tags=["Analytics"])
     logger.info("All routers included successfully")
 except Exception as e:
     logger.error(f"Failed to include routers: {e}")

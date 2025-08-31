@@ -1,73 +1,165 @@
-# Welcome to your Lovable project
+# CampoCode Forge
 
-## Project info
+A modern learning platform built with React frontend and Python FastAPI backend.
 
-**URL**: https://lovable.dev/projects/e7fdc40b-e369-4973-ad9d-ac855fcc1102
+## Project Structure
 
-## How can I edit this code?
+This project consists of two main parts:
+- **Frontend**: React + TypeScript + Vite + shadcn/ui
+- **Backend**: Python FastAPI + SQLAlchemy + JWT Authentication
 
-There are several ways of editing your application.
+## Quick Start
 
-**Use Lovable**
-
-Simply visit the [Lovable Project](https://lovable.dev/projects/e7fdc40b-e369-4973-ad9d-ac855fcc1102) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
+### Frontend (React)
 
 ```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+# Install dependencies
+npm install
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# Start development server
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+The frontend will be available at `http://localhost:5173`
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+### Backend (Python FastAPI)
 
-**Use GitHub Codespaces**
+```sh
+# Navigate to backend directory
+cd backend
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+# Create virtual environment (Windows)
+python -m venv venv
+venv\Scripts\activate
 
-## What technologies are used for this project?
+# Or on macOS/Linux
+python -m venv venv
+source venv/bin/activate
 
-This project is built with:
+# Install dependencies
+pip install -r requirements.txt
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+# Start the server
+python main.py
+```
 
-## How can I deploy this project?
+The backend API will be available at `http://localhost:8000`
+API Documentation: `http://localhost:8000/docs`
 
-Simply open [Lovable](https://lovable.dev/projects/e7fdc40b-e369-4973-ad9d-ac855fcc1102) and click on Share -> Publish.
+### Alternative: Use the provided scripts
 
-## Can I connect a custom domain to my Lovable project?
+**Windows:**
+```sh
+# Double-click or run from command line
+backend\start_backend.bat
+```
 
-Yes, you can!
+**All platforms:**
+```sh
+cd backend
+python start.py
+```
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+## Technologies Used
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+### Frontend
+- **Vite** - Fast build tool and dev server
+- **TypeScript** - Type-safe JavaScript
+- **React** - UI library
+- **shadcn/ui** - Beautiful UI components
+- **Tailwind CSS** - Utility-first CSS framework
+- **React Router** - Client-side routing
+- **React Query** - Data fetching and caching
+
+### Backend
+- **FastAPI** - Modern, fast web framework
+- **SQLAlchemy** - SQL toolkit and ORM
+- **Pydantic** - Data validation
+- **JWT** - Authentication tokens
+- **Uvicorn** - ASGI server
+- **SQLite/PostgreSQL** - Database options
+
+## API Endpoints
+
+### Authentication
+- `POST /api/v1/users/register` - Register a new user
+- `POST /api/v1/users/login` - Login user
+- `GET /api/v1/users/me` - Get current user info
+
+### Courses
+- `GET /api/v1/courses/` - Get all courses
+- `POST /api/v1/courses/` - Create a new course
+- `GET /api/v1/courses/{id}` - Get course by ID
+- `PUT /api/v1/courses/{id}` - Update course
+- `DELETE /api/v1/courses/{id}` - Delete course
+
+### Achievements
+- `GET /api/v1/achievements/` - Get all achievements
+- `POST /api/v1/achievements/` - Create achievement
+- `GET /api/v1/achievements/{id}` - Get achievement by ID
+
+## Development
+
+### Frontend Development
+
+```sh
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
+
+# Build for production
+npm run build
+
+# Preview production build
+npm run preview
+```
+
+### Backend Development
+
+```sh
+cd backend
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Run with auto-reload
+uvicorn main:app --reload --host 0.0.0.0 --port 8000
+
+# Run tests
+pytest
+```
+
+## Deployment
+
+### Frontend
+The frontend can be deployed to any static hosting service:
+- Vercel
+- Netlify
+- GitHub Pages
+- AWS S3 + CloudFront
+
+### Backend
+The backend can be deployed to:
+- Heroku
+- Railway
+- DigitalOcean App Platform
+- AWS EC2
+- Docker containers
+
+## Project Info
+
+**Original URL**: https://lovable.dev/projects/e7fdc40b-e369-4973-ad9d-ac855fcc1102
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Test both frontend and backend
+5. Submit a pull request
+
+## License
+
+This project is licensed under the ISC License.
