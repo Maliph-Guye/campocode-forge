@@ -285,3 +285,28 @@ export interface PracticeExerciseSubmission {
   language: string;
   time_spent_seconds: number;
 }
+
+// Supabase Profile types
+export interface Profile {
+  id: string;
+  user_id: string;
+  full_name?: string;
+  username?: string;
+  avatar_url?: string;
+  bio?: string;
+  subscription_tier?: string;
+  created_at: string;
+  updated_at: string;
+}
+
+// Auth Context types
+export interface AuthContextType {
+  user: any | null;
+  session: any | null;
+  profile: Profile | null;
+  loading: boolean;
+  signUp: (email: string, password: string, metadata?: any) => Promise<{ error: any }>;
+  signIn: (email: string, password: string) => Promise<{ error: any }>;
+  signOut: () => Promise<{ error: any }>;
+  resetPassword: (email: string) => Promise<{ error: any }>;
+}

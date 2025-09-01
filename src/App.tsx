@@ -16,6 +16,8 @@ import Learning from "./pages/Learning";
 import Profile from "./pages/Profile";
 import Achievements from "./pages/Achievements";
 import Settings from "./pages/Settings";
+import Analytics from "./pages/Analytics";
+import Practice from "./pages/Practice";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -49,9 +51,12 @@ const App = () => (
               <Route path="/achievements" element={<AppLayout />}>
                 <Route index element={<Achievements />} />
               </Route>
-              <Route path="/settings" element={<AppLayout />}>
-                <Route index element={<Settings />} />
-              </Route>
+          <Route path="/analytics" element={<AppLayout />}>
+            <Route index element={<Analytics />} />
+          </Route>
+          <Route path="/practice" element={<AppLayout />}>
+            <Route index element={<Practice />} />
+          </Route>
               
               {/* Catch-all route */}
               <Route path="*" element={<NotFound />} />

@@ -12,8 +12,8 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useAuth } from '@/contexts/AuthContext';
-import { LogOut, Settings, User } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { LogOut, Settings, User, Code2 } from 'lucide-react';
+import { useNavigate, Link } from 'react-router-dom';
 
 export const AppHeader: React.FC = () => {
   const { profile, signOut } = useAuth();
@@ -34,7 +34,10 @@ export const AppHeader: React.FC = () => {
     <header className="h-16 border-b border-border flex items-center justify-between px-6 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="flex items-center gap-4">
         <SidebarTrigger />
-        <h1 className="text-xl font-bold text-foreground">CampoCode</h1>
+        <Link to="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
+          <Code2 className="h-8 w-8 text-primary" />
+          <h1 className="text-xl font-bold text-foreground">CampoCode</h1>
+        </Link>
       </div>
 
       <div className="flex items-center gap-4">
