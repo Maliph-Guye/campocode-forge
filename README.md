@@ -1,5 +1,7 @@
 # CampoCode Forge
 
+View live Demo: https://maliph-guye-campocod-uskp.bolt.host
+
 A modern learning platform built with React frontend and Python FastAPI backend.
 
 ## Project Structure
