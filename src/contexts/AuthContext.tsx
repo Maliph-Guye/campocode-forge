@@ -33,6 +33,25 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         .single();
 
       if (error) {
+        // If profile doesn't exist, create one
+        if (error.code === 'PGRST116') {
+          const { data: newProfile, error: createError } = await supabase
+            .from('profiles')
+            .insert({
+              user_id: userId,
+              full_name: user?.user_metadata?.full_name || user?.email || 'User',
+              username: user?.email?.split('@')[0] || 'user',
+              subscription_tier: 'free'
+            })
+            .select()
+            .single();
+          
+          if (createError) {
+            console.error('Error creating profile:', createError);
+            return null;
+          }
+          return newProfile as Profile;
+        }
         console.error('Error fetching profile:', error);
         return null;
       }
@@ -47,16 +66,19 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     // Set up auth state listener
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
+        console.log('Auth state change:', event, !!session);
         setSession(session);
         setUser(session?.user ?? null);
 
         if (session?.user) {
-          // Defer profile fetch to avoid blocking auth state change
-          setTimeout(async () => {
+          try {
             const userProfile = await fetchProfile(session.user.id);
             setProfile(userProfile);
+          } catch (error) {
+            console.error('Error in profile fetch:', error);
+          } finally {
             setLoading(false);
-          }, 0);
+          }
         } else {
           setProfile(null);
           setLoading(false);
@@ -65,16 +87,20 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     );
 
     // Check for existing session
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    supabase.auth.getSession().then(async ({ data: { session } }) => {
+      console.log('Initial session check:', !!session);
       setSession(session);
       setUser(session?.user ?? null);
       
       if (session?.user) {
-        setTimeout(async () => {
+        try {
           const userProfile = await fetchProfile(session.user.id);
           setProfile(userProfile);
+        } catch (error) {
+          console.error('Error in initial profile fetch:', error);
+        } finally {
           setLoading(false);
-        }, 0);
+        }
       } else {
         setLoading(false);
       }
