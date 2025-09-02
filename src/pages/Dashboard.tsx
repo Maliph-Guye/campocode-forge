@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { BookOpen, Clock, Trophy, TrendingUp, Play } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import Maliph from '@/components/Maliph';
 
 export default function Dashboard() {
   const { profile } = useAuth();
@@ -226,6 +227,9 @@ export default function Dashboard() {
           </Card>
         </div>
       </div>
+
+      {/* Maliph Chatbot */}
+      <Maliph context="Dashboard overview and learning progress assistance" />
     </div>
   );
 }

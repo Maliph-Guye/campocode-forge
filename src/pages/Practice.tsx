@@ -17,6 +17,7 @@ import {
   Gamepad2,
   Lightbulb
 } from 'lucide-react';
+import Maliph from '@/components/Maliph';
 
 const Practice = () => {
   const [selectedDifficulty, setSelectedDifficulty] = useState('beginner');
@@ -362,6 +363,9 @@ const Practice = () => {
           </Card>
         </TabsContent>
       </Tabs>
+
+      {/* Maliph Chatbot */}
+      <Maliph context="Coding practice exercises and challenges assistance" />
     </div>
   );
 };

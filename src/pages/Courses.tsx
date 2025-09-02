@@ -20,12 +20,14 @@ import {
   Code,
   Database,
   Palette,
-  Brain
+  Brain,
+  CheckCircle
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from '@/hooks/use-toast';
+import Maliph from '@/components/Maliph';
 
 // Import generated images
 import webDevImage from '@/assets/course-web-dev.jpg';
@@ -40,6 +42,7 @@ const Courses = () => {
   const [courses, setCourses] = useState([]);
   const [enrollments, setEnrollments] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [enrollingCourse, setEnrollingCourse] = useState<string | null>(null);
   const navigate = useNavigate();
   const { user, profile } = useAuth();
 
@@ -223,53 +226,86 @@ const Courses = () => {
       navigate('/auth');
       return;
     }
-
+    
     try {
-      // Check if already enrolled
-      const { data: existingEnrollment } = await supabase
-        .from('enrollments')
-        .select('id')
-        .eq('course_id', courseId)
-        .eq('user_id', profile?.id)
-        .single();
+      setEnrollingCourse(courseId);
+      
+      const { data, error } = await supabase.functions.invoke('enroll-course', {
+        body: { course_id: courseId },
+      });
 
-      if (existingEnrollment) {
-        toast({
-          title: 'Already Enrolled',
-          description: 'You are already enrolled in this course.',
-          variant: 'destructive',
-        });
+      if (error) {
+        throw new Error(error.message);
+      }
+
+      if (data.requires_payment) {
+        // Course requires payment
+        handlePaymentFlow(courseId, data.course_price);
         return;
       }
 
-      // Create enrollment
-      const { error } = await supabase
-        .from('enrollments')
-        .insert({
-          course_id: courseId,
-          user_id: profile?.id,
-          progress_percentage: 0
-        });
-
-      if (error) {
+      if (data.success) {
         toast({
-          title: 'Enrollment Failed',
-          description: error.message,
-          variant: 'destructive',
+          title: "Enrollment Successful",
+          description: data.message,
         });
-      } else {
-        toast({
-          title: 'Successfully Enrolled!',
-          description: 'You can now access the course content.',
-        });
+        
+        // Refresh enrollments
+        fetchEnrollments();
         navigate(`/learning/${courseId}`);
+      } else {
+        throw new Error(data.error || 'Enrollment failed');
       }
     } catch (error) {
       console.error('Enrollment error:', error);
       toast({
-        title: 'Enrollment Failed',
-        description: 'Something went wrong. Please try again.',
-        variant: 'destructive',
+        title: "Enrollment Failed",
+        description: error instanceof Error ? error.message : "Failed to enroll in course",
+        variant: "destructive",
+      });
+    } finally {
+      setEnrollingCourse(null);
+    }
+  };
+
+  const handlePaymentFlow = async (courseId: string, amount: number) => {
+    if (!user || !profile) return;
+    
+    try {
+      const paymentData = {
+        course_id: courseId,
+        amount: amount,
+        currency: 'KES',
+        email: user.email!,
+        first_name: profile.full_name?.split(' ')[0] || 'User',
+        last_name: profile.full_name?.split(' ').slice(1).join(' ') || '',
+      };
+
+      const { data, error } = await supabase.functions.invoke('intasend-payment', {
+        body: paymentData,
+      });
+
+      if (error) {
+        throw new Error(error.message);
+      }
+
+      if (data.success && data.checkout_url) {
+        // Open Intasend checkout in new tab
+        window.open(data.checkout_url, '_blank');
+        
+        toast({
+          title: "Payment Initiated",
+          description: "Please complete payment in the new tab to enroll in the course.",
+        });
+      } else {
+        throw new Error(data.error || 'Failed to initiate payment');
+      }
+    } catch (error) {
+      console.error('Payment error:', error);
+      toast({
+        title: "Payment Failed",
+        description: error instanceof Error ? error.message : "Failed to initiate payment",
+        variant: "destructive",
       });
     }
   };
@@ -476,8 +512,14 @@ const Courses = () => {
                         <Button 
                           onClick={() => enrolled ? navigate(`/learning/${course.id}`) : handleEnroll(course.id)} 
                           className="flex-1"
+                          disabled={enrollingCourse === course.id}
                         >
-                          {enrolled ? (
+                          {enrollingCourse === course.id ? (
+                            <>
+                              <div className="w-4 h-4 mr-2 animate-spin border-2 border-current border-t-transparent rounded-full" />
+                              Processing...
+                            </>
+                          ) : enrolled ? (
                             <>
                               <Play className="h-4 w-4 mr-2" />
                               Continue Learning
@@ -485,7 +527,7 @@ const Courses = () => {
                           ) : (
                             <>
                               <BookOpen className="h-4 w-4 mr-2" />
-                              Enroll Now
+                              {course.price > 0 ? `Enroll - KES ${course.price}` : 'Enroll Free'}
                             </>
                           )}
                         </Button>
@@ -596,6 +638,9 @@ const Courses = () => {
           </div>
         </TabsContent>
       </Tabs>
+
+      {/* Maliph Chatbot */}
+      <Maliph context="Course catalog and enrollment assistance" />
     </div>
   );
 };

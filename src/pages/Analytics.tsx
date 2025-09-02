@@ -3,6 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 import { BarChart, LineChart, Activity, TrendingUp, Clock, Target, Award, BookOpen } from 'lucide-react';
+import Maliph from '@/components/Maliph';
 
 const Analytics = () => {
   const weeklyData = [
@@ -170,6 +171,9 @@ const Analytics = () => {
           </div>
         </CardContent>
       </Card>
+
+      {/* Maliph Chatbot */}
+      <Maliph context="Learning analytics and performance tracking assistance" />
     </div>
   );
 };
